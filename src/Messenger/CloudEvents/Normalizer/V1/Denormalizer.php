@@ -7,7 +7,6 @@ use CloudEvents\Serializers\Normalizers\V1\DenormalizerInterface as SdkDenormali
 use JMS\Serializer\SerializerInterface;
 use Stegeman\Messenger\CloudEvents\Normalizer\DenormalizerInterface;
 use Stegeman\Messenger\CloudEvents\Serializer\MessageRegistryInterface;
-use Stegeman\Tests\Messenger\Unit\Messenger\CloudEvents\DummyEvent;
 
 readonly class Denormalizer implements DenormalizerInterface
 {
@@ -19,9 +18,13 @@ readonly class Denormalizer implements DenormalizerInterface
 
     public function denormalize(array $normalizedEvent): CloudEventInterface
     {
-        $message = $this->serializer->deserialize($normalizedEvent['body'], DummyEvent::class, 'json');
+        $message = $this->serializer->deserialize(
+            json_encode($normalizedEvent['data']),
+            $this->messageRegistry->getMessageClassNameForType($normalizedEvent['type']),
+            'json'
+        );
 
-        $normalizedEvent['body'] = $message;
+        $normalizedEvent['data'] = $message;
 
         return $this->sdkDenormalizer->denormalize($normalizedEvent);
     }

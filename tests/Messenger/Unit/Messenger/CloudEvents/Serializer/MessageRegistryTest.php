@@ -4,7 +4,9 @@ namespace Messenger\Unit\Messenger\CloudEvents\Serializer;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Stegeman\Messenger\CloudEvents\Serializer\MessageRegistry;
+use Stegeman\Messenger\CloudEvents\Serializer\NoClassNameFoundForTypeException;
 use Stegeman\Messenger\CloudEvents\Serializer\NoNameFoundForMessageException;
 
 class MessageRegistryTest extends TestCase
@@ -14,9 +16,9 @@ class MessageRegistryTest extends TestCase
     {
         $messageRegistry = new MessageRegistry();
 
-        $messageRegistry->addMessage('name', \stdClass::class);
+        $messageRegistry->addMessage('name', stdClass::class);
 
-        self::assertSame('name', $messageRegistry->getTypeForMessageClass(new \stdClass()));
+        self::assertSame('name', $messageRegistry->getTypeForMessageClass(stdClass::class));
     }
 
     #[Test]
@@ -27,6 +29,27 @@ class MessageRegistryTest extends TestCase
 
         $messageRegistry = new MessageRegistry();
 
-        $messageRegistry->getTypeForMessageClass(new \stdClass());
+        $messageRegistry->getTypeForMessageClass(stdClass::class);
+    }
+
+    #[Test]
+    public function aTypeForMessageClassIsRetrieved(): void
+    {
+        $messageRegistry = new MessageRegistry();
+
+        $messageRegistry->addMessage('name', stdClass::class);
+
+        self::assertSame(stdClass::class, $messageRegistry->getMessageClassNameForType('name'));
+    }
+
+    #[Test]
+    public function anExceptionIsThrownIfNoClassNameCanBeFoundForGivenType(): void
+    {
+        self::expectException(NoClassNameFoundForTypeException::class);
+        self::expectExceptionMessage('No classname found for message with name \'name\'');
+
+        $messageRegistry = new MessageRegistry();
+
+        $messageRegistry->getMessageClassNameForType('name');
     }
 }

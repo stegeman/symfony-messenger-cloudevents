@@ -2,7 +2,7 @@
 
 namespace Stegeman\Messenger\CloudEvents\Serializer;
 
-use Stegeman\Messenger\CloudEvents\Converter\V1\EnvelopeConverter;
+use Stegeman\Messenger\CloudEvents\Converter\EnvelopeConverterInterface;
 use Stegeman\Messenger\CloudEvents\Normalizer\DenormalizerInterface;
 use Stegeman\Messenger\CloudEvents\Normalizer\NormalizerInterface;
 use Symfony\Component\Messenger\Envelope;
@@ -12,7 +12,7 @@ use JMS\Serializer;
 readonly class CloudEventsSerializer implements SerializerInterface
 {
     public function __construct(
-        private EnvelopeConverter $envelopeConverter,
+        private EnvelopeConverterInterface $envelopeConverter,
         private NormalizerInterface $normalizer,
         private DenormalizerInterface $denormalizer,
         private Serializer\SerializerInterface $serializer,

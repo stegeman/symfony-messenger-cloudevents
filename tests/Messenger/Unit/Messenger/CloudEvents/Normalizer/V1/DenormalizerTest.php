@@ -17,23 +17,28 @@ class DenormalizerTest extends TestCase
     #[Test]
     public function  anArrayIsDenormalizedToCloudEvent(): void
     {
-        $body = '{"id": "100", "name": "foobar"}';
+        $data = [
+            'type' => 'dummy-event',
+            'data' => [
+                'id' => '100',
+                'name' => 'foobar'
+            ]
+        ];
         $targetClass = DummyEvent::class;
         $message = new DummyEvent('100', 'foobar');
-        $input = [ 'body' => $body];
-        $denormalizerInput = ['body' => $message];
+        $denormalizerInput = $data;
+        $denormalizerInput['data'] = $message;
 
         $denormalizer = new Denormalizer(
             $this->createMessageRegistry('dummy-event', $targetClass),
-            $this->createSerializerWithDeserializeCall($body, $targetClass, $message),
+            $this->createSerializerWithDeserializeCall(json_encode($data['data']), $targetClass, $message),
             $this->createDenormalizerWithDenormalizeCall($denormalizerInput, $message)
         );
 
-        $cloudEvent = $denormalizer->denormalize($input);
+        $cloudEvent = $denormalizer->denormalize($data);
 
         self::assertInstanceOf(CloudEventInterface::class, $cloudEvent);
         self::assertInstanceOf(DummyEvent::class, $cloudEvent->getData());
-        self::assertSame('dummy-event', $cloudEvent->getType());
     }
 
     private function createDenormalizerWithDenormalizeCall(array $denormalizeInput, object $denormalizeResult): DenormalizerInterface

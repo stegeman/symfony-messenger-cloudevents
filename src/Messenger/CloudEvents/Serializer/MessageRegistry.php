@@ -25,6 +25,14 @@ class MessageRegistry implements MessageRegistryInterface
 
     public function getMessageClassNameForType(string $name): string
     {
-
+        return
+            array_key_exists($name, $this->messageMapping)
+                ? $this->messageMapping[$name]
+                : throw new NoClassNameFoundForTypeException(
+                    sprintf(
+                        'No classname found for message with name \'%s\'',
+                        $name
+                    )
+            );
     }
 }

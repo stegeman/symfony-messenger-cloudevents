@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactoryInterface;
 use Stegeman\Messenger\CloudEvents\Serializer\UuidGenerator;
+use Symfony\Component\Messenger\Envelope;
 
 class UuidGeneratorTest extends TestCase
 {
@@ -18,7 +19,7 @@ class UuidGeneratorTest extends TestCase
             $this->createUuidFactoryWithUuid4Call('69e1e5c8-78ff-4e2d-896b-5520754d5721')
         );
 
-        $uuid = $UUIDGenerator->generate(new \stdClass());
+        $uuid = $UUIDGenerator->generate(new Envelope(new \stdClass()));
 
         self::assertSame('69e1e5c8-78ff-4e2d-896b-5520754d5721', $uuid);
     }

@@ -35,6 +35,8 @@ class CloudEventsSerializerTest extends TestCase
                 new SdkNormalizer()
             ),
             new Denormalizer(
+                $this->createMessageRegistry(),
+                SerializerBuilder::create()->build(),
                 new SdkDenormalizer()
             ),
             SerializerBuilder::create()->build(),
@@ -60,7 +62,9 @@ class CloudEventsSerializerTest extends TestCase
                 new SdkNormalizer()
             ),
             new Denormalizer(
-                new SdkDenormalizer()
+                $this->createMessageRegistry(),
+                SerializerBuilder::create()->build(),
+                new SdkDenormalizer(),
             ),
             SerializerBuilder::create()->build(),
             'application/json'

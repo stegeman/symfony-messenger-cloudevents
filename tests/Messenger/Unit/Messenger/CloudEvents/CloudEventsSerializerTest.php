@@ -9,8 +9,7 @@ use JMS\Serializer\SerializerInterface;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Stegeman\Messenger\CloudEvents\Factory\CloudEventFactoryInterface;
-use Stegeman\Messenger\CloudEvents\Factory\CloudEventToMessageConverterInterface;
+use Stegeman\Messenger\CloudEvents\Converter\EnvelopeConverterInterface;
 use Stegeman\Messenger\CloudEvents\Normalizer\DenormalizerInterface;
 use Stegeman\Messenger\CloudEvents\Normalizer\NormalizerInterface;
 use Stegeman\Messenger\CloudEvents\Serializer\CloudEventsSerializer;
@@ -28,8 +27,7 @@ class CloudEventsSerializerTest extends TestCase
         $envelope = new Envelope($dummyEvent);
 
         $serializer = new CloudEventsSerializer(
-            cloudEventToMessageConverter: $this->createCloudEventToMessageConverterInterface(),
-            cloudEventFactory: $this->createCloudEventFactoryWithBuildForEventCall(),
+            $this->createEnvelopeConverterInterface(),
             normalizer: $this->createNormalizerWithNormalizeCall(),
             denormalizer: $this->createDenormalizerInterface(),
             serializer: $this->createSerializerWithSerializeCall(),
@@ -51,8 +49,7 @@ class CloudEventsSerializerTest extends TestCase
     public function aCloudEventsFormatIsDeserializedToEvent(): void
     {
         $serializer = new CloudEventsSerializer(
-            cloudEventToMessageConverter: $this->createCloudEventToMessageConverterInterface(),
-            cloudEventFactory: $this->createCloudEventFactoryInterface(),
+            $this->createEnvelopeConverterWithFromCloudEventCall(new Envelope(new DummyEvent('1', 'name'))),
             normalizer: $this->createNormalizerInterface(),
             denormalizer: $this->createDenormalizerWithDenormalizeCall(),
             serializer: $this->createSerializerInterface(),
@@ -67,22 +64,6 @@ class CloudEventsSerializerTest extends TestCase
         );
 
         self::assertInstanceOf(Envelope::class, $envelope);
-    }
-
-    private function createCloudEventFactoryWithBuildForEventCall(): CloudEventFactoryInterface
-    {
-        $cloudEventFactory = $this->createCloudEventFactoryInterface();
-
-        $cloudEventFactory->expects($this->atLeastOnce())
-            ->method('buildForEnvelope')
-            ->willReturn($this->createCloudEventInterface());
-
-        return $cloudEventFactory;
-    }
-
-    private function createCloudEventFactoryInterface(): CloudEventFactoryInterface&MockObject
-    {
-        return $this->createMock(CloudEventFactoryInterface::class);
     }
 
     private function createCloudEventInterface(): CloudEventInterface
@@ -154,19 +135,19 @@ class CloudEventsSerializerTest extends TestCase
         return $this->createMock(SerializerInterface::class);
     }
 
-    private function createCloudEventToMessageConverterWithConvertCall(object $convertedMessage): CloudEventToMessageConverterInterface
+    private function createEnvelopeConverterWithFromCloudEventCall(Envelope $fromCloudEventResult): EnvelopeConverterInterface
     {
-        $cloudEventToMessageFactory = $this->createCloudEventToMessageConverterInterface();
+        $envelopeConverter = $this->createEnvelopeConverterInterface();
 
-        $cloudEventToMessageFactory->expects($this->once())
-            ->method('convert')
-            ->willReturn($convertedMessage);
+        $envelopeConverter->expects($this->once())
+            ->method('fromCloudEvent')
+            ->willReturn($fromCloudEventResult);
 
-        return $cloudEventToMessageFactory;
+        return $envelopeConverter;
     }
 
-    private function createCloudEventToMessageConverterInterface(): CloudEventToMessageConverterInterface&MockObject
+    private function createEnvelopeConverterInterface(): EnvelopeConverterInterface&MockObject
     {
-        return $this->createMock(CloudEventToMessageConverterInterface::class);
+        return $this->createMock(EnvelopeConverterInterface::class);
     }
 }
