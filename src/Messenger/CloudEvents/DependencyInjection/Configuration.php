@@ -15,6 +15,9 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode->children()
+            ->scalarNode('normalizer_service_id')
+                ->defaultValue('Stegeman\Messenger\CloudEvents\Normalizer\V1\Normalizer')
+            ->end()
             ->arrayNode('registry')
                 ->prototype('array')
                     ->children()

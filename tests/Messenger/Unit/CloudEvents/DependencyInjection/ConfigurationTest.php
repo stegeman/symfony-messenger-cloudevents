@@ -53,6 +53,18 @@ class ConfigurationTest extends TestCase
         );
     }
 
+    #[Test]
+    public function defaultRegistryValueIsSetToEmptyArray(): void
+    {
+         $this->assertProcessedConfigurationEquals(
+             [
+                 'cloud_events' => []
+             ],
+             [
+                     'registry' => []
+             ]
+         );
+    }
 
     protected function getConfiguration(): Configuration
     {
