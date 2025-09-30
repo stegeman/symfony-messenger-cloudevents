@@ -14,7 +14,7 @@ class CloudEventsBundle extends AbstractBundle
     {
         $loader = new YamlFileLoader(
             $builder,
-            new FileLocator(__DIR__ . DIRECTORY_SEPARATOR . 'config')
+            new FileLocator(__DIR__ . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'config')
         );
 
         $loader->load('services.yaml');
