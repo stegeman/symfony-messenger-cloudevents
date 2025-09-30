@@ -9,34 +9,32 @@
 
         <!-- Concrete services (no extra configuration) -->
         <service id="Stegeman\Messenger\CloudEvents\Serializer\CloudEventsSerializer"/>
+        <service id="Stegeman\Messenger\CloudEvents\Serializer\MessageRegistry" />
 
-        <service id="cloud_events.normalizer" class="Stegeman\Messenger\CloudEvents\Normalizer\V1\Normalizer"/>
-        <service id="Ramsey\Uuid\UuidFactory"/>
-        <service id="Stegeman\Messenger\CloudEvents\Serializer\UuidGenerator"/>
-        <service id="Stegeman\Messenger\CloudEvents\Serializer\MessageRegistry"/>
+        <service id="cloud_events.normalizer" class="%cloud_events.normalizer_service_id%"/>
+        <service id="cloud_events.id_generator" class="Stegeman\Messenger\CloudEvents\Serializer\UuidGenerator"/>
         <service id="Stegeman\Messenger\CloudEvents\Converter\V1\EnvelopeConverter">
-            <argument type="service" id="Stegeman\Messenger\CloudEvents\Serializer\MessageRegistryInterface"/>
-            <argument type="service" id="Stegeman\Messenger\CloudEvents\Serializer\IdGeneratorInterface"/>
+            <argument type="service" id="Stegeman\Messenger\CloudEvents\Serializer\MessageRegistry"/>
+            <argument type="service" id="cloud_events.id_generator"/>
         </service>
-        <service id="CloudEvents\Serializers\Normalizers\V1\Denormalizer"/>
         <service id="Stegeman\Messenger\CloudEvents\Normalizer\V1\Denormalizer"/>
+
+        <!-- Third party services -->
+        <service id="Ramsey\Uuid\UuidFactory"/>
+        <service id="CloudEvents\Serializers\Normalizers\V1\Denormalizer"/>
         <service id="CloudEvents\Serializers\Normalizers\V1\Normalizer"/>
 
         <!-- Aliases (interface → concrete implementation) -->
+        <service id="Stegeman\Messenger\CloudEvents\Serializer\MessageRegistryInterface" alias="Stegeman\Messenger\CloudEvents\Serializer\MessageRegistry"/>
+
         <service id="Stegeman\Messenger\CloudEvents\Factory\CloudEventFactoryInterface"
                  alias="Stegeman\Messenger\CloudEvents\Factory\V1\CloudEventFactory"/>
 
         <service id="Ramsey\Uuid\UuidFactoryInterface"
                  alias="Ramsey\Uuid\UuidFactory"/>
 
-        <service id="Stegeman\Messenger\CloudEvents\Serializer\IdGeneratorInterface"
-                 alias="Stegeman\Messenger\CloudEvents\Serializer\UuidGenerator"/>
-
         <service id="Stegeman\Messenger\CloudEvents\Normalizer\NormalizerInterface"
                  alias="cloud_events.normalizer"/>
-
-        <service id="Stegeman\Messenger\CloudEvents\Serializer\MessageRegistryInterface"
-                 alias="Stegeman\Messenger\CloudEvents\Serializer\MessageRegistry"/>
 
         <service id="Stegeman\Messenger\CloudEvents\Converter\EnvelopeConverterInterface"
                  alias="Stegeman\Messenger\CloudEvents\Converter\V1\EnvelopeConverter"/>
