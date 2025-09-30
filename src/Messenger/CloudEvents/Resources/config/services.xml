@@ -9,8 +9,8 @@
 
         <!-- Concrete services (no extra configuration) -->
         <service id="Stegeman\Messenger\CloudEvents\Serializer\CloudEventsSerializer"/>
-        <service id="Stegeman\Messenger\CloudEvents\Factory\V1\CloudEventFactory"/>
-        <service id="Stegeman\Messenger\CloudEvents\Normalizer\V1\Normalizer"/>
+
+        <service id="cloud_events.normalizer" class="Stegeman\Messenger\CloudEvents\Normalizer\V1\Normalizer"/>
         <service id="Ramsey\Uuid\UuidFactory"/>
         <service id="Stegeman\Messenger\CloudEvents\Serializer\UuidGenerator"/>
         <service id="Stegeman\Messenger\CloudEvents\Serializer\MessageRegistry"/>
@@ -33,7 +33,7 @@
                  alias="Stegeman\Messenger\CloudEvents\Serializer\UuidGenerator"/>
 
         <service id="Stegeman\Messenger\CloudEvents\Normalizer\NormalizerInterface"
-                 alias="Stegeman\Messenger\CloudEvents\Normalizer\V1\Normalizer"/>
+                 alias="cloud_events.normalizer"/>
 
         <service id="Stegeman\Messenger\CloudEvents\Serializer\MessageRegistryInterface"
                  alias="Stegeman\Messenger\CloudEvents\Serializer\MessageRegistry"/>
