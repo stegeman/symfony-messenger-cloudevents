@@ -54,7 +54,7 @@ class ConfigurationTest extends TestCase
     }
 
 
-    protected function getConfiguration()
+    protected function getConfiguration(): Configuration
     {
         return new Configuration();
     }
