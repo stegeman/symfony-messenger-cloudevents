@@ -38,6 +38,27 @@ class NormalizerTest extends TestCase
         }
     }
 
+    #[Test]
+    public function nullValuesAreAlsoSerialized(): void
+    {
+        $normalizer = $this->getNormalizer();
+
+        $result = $normalizer->normalize(
+            new CloudEvent(
+                '100',
+                'name-of-producer',
+                'nl.stegeman.dummy-event-name',
+                new DummyEvent('dummy-event-id', null),
+                'application/json',
+                'v1.0',
+                "subject",
+                $time = new \DateTimeImmutable(),
+            )
+        );
+
+        self::assertMatchesRegularExpression('/"name":null/', $result['body']);
+    }
+
     private function getNormalizer(): Normalizer
     {
         return new Normalizer(

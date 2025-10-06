@@ -6,6 +6,7 @@ use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Stegeman\Messenger\CloudEvents\DependencyInjection\Configuration;
+use Stegeman\Messenger\CloudEvents\Normalizer\V1\Normalizer;
 
 class ConfigurationTest extends TestCase
 {
@@ -26,7 +27,8 @@ class ConfigurationTest extends TestCase
                             'name' => 'message-name-2',
                             'className' => \DateTime::class
                         ],
-                    ]
+                    ],
+                    'normalizer_service_id' => Normalizer::class
                 ]
             ]
         );
@@ -61,7 +63,8 @@ class ConfigurationTest extends TestCase
                  'cloud_events' => []
              ],
              [
-                     'registry' => []
+                 'registry' => [],
+                 'normalizer_service_id' => Normalizer::class
              ]
          );
     }
