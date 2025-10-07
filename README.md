@@ -2,8 +2,18 @@
 
 ## Install
 
-```composer require stegeman/symfony-messenger-cloudevents```
+```composer require stegeman/symfony-messenger-cloud-events```
 
+Enable the bundle in your kernel:
+
+_bundles.php_
+```
+return [
+    ...
+    Stegeman\Messenger\CloudEvents\CloudEventsBundle::class => ['all' => true],
+    ...
+];
+```
 ## Configuration
 
 Configure the correct serializer for your transport:
