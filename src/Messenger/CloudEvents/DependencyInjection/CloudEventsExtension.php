@@ -6,7 +6,7 @@ use Stegeman\Messenger\CloudEvents\Serializer\MessageRegistry;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class CloudEventsExtension extends Extension
 {
@@ -14,12 +14,12 @@ class CloudEventsExtension extends Extension
     {
         $configs = $this->processConfiguration(new Configuration(), $configs);
 
-        $loader = new XmlFileLoader(
+        $loader = new YamlFileLoader(
             $builder,
             new FileLocator(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'config')
         );
 
-        $loader->load('services.xml');
+        $loader->load('services.yaml');
 
         $definition = $builder->getDefinition(MessageRegistry::class);
         foreach ($configs['registry'] as $message) {

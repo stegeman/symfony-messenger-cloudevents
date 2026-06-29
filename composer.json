@@ -3,7 +3,7 @@
     "description": "Symfony Messenger Cloud Events",
     "type": "bundle",
     "license": "MIT",
-    "version": "1.1.5",
+    "version": "1.1.7",
     "authors": [
         {
             "name": "Rene Terstegen",

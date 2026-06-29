@@ -1,0 +1,49 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Stegeman\Messenger\CloudEvents\Serializer\CloudEventsSerializer: ~
+    Stegeman\Messenger\CloudEvents\Serializer\MessageRegistry: ~
+
+    cloud_events.normalizer:
+        class: '%cloud_events.normalizer_service_id%'
+    cloud_events.id_generator:
+        class: Stegeman\Messenger\CloudEvents\Serializer\UuidGenerator
+
+    Stegeman\Messenger\CloudEvents\Converter\V1\EnvelopeConverter:
+        arguments:
+            - '@Stegeman\Messenger\CloudEvents\Serializer\MessageRegistry'
+            - '@cloud_events.id_generator'
+
+    Stegeman\Messenger\CloudEvents\Normalizer\V1\Denormalizer: ~
+
+    # Third party services
+    Ramsey\Uuid\UuidFactory: ~
+    CloudEvents\Serializers\Normalizers\V1\Denormalizer: ~
+    CloudEvents\Serializers\Normalizers\V1\Normalizer: ~
+
+    # Aliases (interface → concrete implementation)
+    Stegeman\Messenger\CloudEvents\Serializer\MessageRegistryInterface:
+        alias: Stegeman\Messenger\CloudEvents\Serializer\MessageRegistry
+
+    Stegeman\Messenger\CloudEvents\Factory\CloudEventFactoryInterface:
+        alias: Stegeman\Messenger\CloudEvents\Factory\V1\CloudEventFactory
+
+    Ramsey\Uuid\UuidFactoryInterface:
+        alias: Ramsey\Uuid\UuidFactory
+
+    Stegeman\Messenger\CloudEvents\Normalizer\NormalizerInterface:
+        alias: cloud_events.normalizer
+
+    Stegeman\Messenger\CloudEvents\Converter\EnvelopeConverterInterface:
+        alias: Stegeman\Messenger\CloudEvents\Converter\V1\EnvelopeConverter
+
+    CloudEvents\Serializers\Normalizers\V1\DenormalizerInterface:
+        alias: CloudEvents\Serializers\Normalizers\V1\Denormalizer
+
+    Stegeman\Messenger\CloudEvents\Normalizer\DenormalizerInterface:
+        alias: Stegeman\Messenger\CloudEvents\Normalizer\V1\Denormalizer
+
+    CloudEvents\Serializers\Normalizers\V1\NormalizerInterface:
+        alias: CloudEvents\Serializers\Normalizers\V1\Normalizer
