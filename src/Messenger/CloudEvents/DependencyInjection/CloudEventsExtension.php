@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 class CloudEventsExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $builder)
+    public function load(array $configs, ContainerBuilder $builder): void
     {
         $configs = $this->processConfiguration(new Configuration(), $configs);
 
